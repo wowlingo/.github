@@ -71,18 +71,21 @@ WowLingo는 음성 합성 기술과 게임화된 학습 경험을 결합하여 �
 
 ### 🤖 [wowlingo-ai](https://github.com/wowlingo/wowlingo-ai)
 
-AI 기반 학습 추천 시스템 (Python)
+AI 기반 일일 학습 피드백 시스템 (FastAPI + Ollama)
 
 **주요 기능**:
-- 학습자 수준 분석
-- 맞춤형 학습 경로 추천
-- 난이도 조정
-- 학습 패턴 분석
+- 매일 자동 피드백 생성 (APScheduler)
+- Ollama + Gemma 모델을 활용한 개인화 피드백
+- 학습자 정답률 및 성장 단계 분석
+- 배치 처리로 대량 사용자 지원
+- Docker Compose로 Ollama 포함 배포
 
 **기술 스택**:
-- Python
-- Machine Learning 라이브러리
-- Apache 2.0 License
+- FastAPI, Python 3.11, SQLAlchemy
+- Ollama + Gemma (AI 엔진)
+- APScheduler (배치 스케줄러)
+- Docker, Docker Compose
+
 
 ## 빠른 시작
 
@@ -116,16 +119,20 @@ npm run start:dev
 # wowlingo-ai 디렉토리로 이동
 cd wowlingo-ai
 
-# 가상 환경 생성 및 활성화
+# Docker로 실행 (권장)
+cp .env.example .env
+nano .env  # DB 접속 정보 설정
+docker-compose up -d --build
+
+# 또는 로컬 실행
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
-
-# 의존성 설치
 pip install -r requirements.txt
-
-# AI 서버 실행
-python main.py
+ollama pull gemma
+python -m uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
+
+AI 서버가 http://localhost:8000 에서 실행됩니다.
 
 #### 3. 프론트엔드 실행
 
@@ -196,8 +203,10 @@ npm run dev
 - npm >= 9
 
 ### AI
-- Python >= 3.9
-- pip
+- Python >= 3.11
+- Ollama (AI 엔진)
+- Docker & Docker Compose (권장)
+
 
 ## 기여하기
 
@@ -230,7 +239,7 @@ WowLingo는 오픈 소스 프로젝트입니다. 기여를 환영합니다!
 
 - **wowlingo-client**: 저장소 참고
 - **wowlingo-be**: 저장소 참고
-- **wowlingo-ai**: Apache 2.0 License
+- **wowlingo-ai**: 저장소 참고
 
 ## 팀 & 문의
 
